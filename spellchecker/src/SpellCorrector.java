@@ -38,7 +38,6 @@ public class SpellCorrector {
         for (String word : words) {// Add all maps to the list of possible candidates.
             Map<String, Double> map = getCandidateWords(word);
             allWords.add(map);
-
         }
 
         //Compute all possible sentences
@@ -100,8 +99,12 @@ public class SpellCorrector {
         Double Prob = 1.0;
         //Compute unigram probabilities
         for (int i = 0; i < s.length; i++) {
+            if (!(cr.inVocabulary(s[i]))) {
+                return 0d;
+            }
+//            Map<String, Double> temp = maps.get(i);
+//            System.out.println(temp + "\n" + s[i]);
             Prob *= maps.get(i).get(s[i]) / nine;
-
         }
         //Compute bigram probabilities
         for (int j = 0; j < s.length - 1; j++) {
@@ -114,7 +117,9 @@ public class SpellCorrector {
     }
 
     /**
-     * returns a map with candidate words and their noisy channel probability. *
+     * returns a map with candidate words and their noisy channel probability. 
+     * 
+     * @param word the word to get candidates for
      */
     public Map<String, Double> getCandidateWords(String word) {
         Map<String, Double> mapOfWords = new HashMap<>();
