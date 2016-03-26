@@ -50,7 +50,7 @@ public class SpellCorrector {
                     temp1[k] = words[k];
                 }
                 sentences.add(temp1); // Add the new sentence to the list, the set makes sure that doubles do not occur.
-                System.out.println(sentences.size());
+                //System.out.println(sentences.size());
                 //Given that only 2 errors occur and are never in consecutive words, skip an index
                 for (int j = i + 2; j < words.length; j++) {
                     for (String CandidateJ : allWords.get(j).keySet()) {
@@ -76,10 +76,13 @@ public class SpellCorrector {
         //Calculate the probaility of each sentence, using the  bigram model
         for (String[] s : sentences) {
             Double Prob = SentenceP(s, allWords);
-            System.out.println(Prob + " " + sentences.size());
+            if (Arrays.toString(s).equals("[at, the, home, locations, there, were, traces, of, water]")) {
+                System.out.println(Prob + " de zin");
+            }
             if (Prob >= MaxProb) {
                 MaxProb = Prob;
                 finalSuggestion = Arrays.toString(s);
+                System.out.println(Prob + " " + finalSuggestion);
             }
         }
         //Return the sentence with the highest probability
@@ -109,16 +112,19 @@ public class SpellCorrector {
         //Compute bigram probabilities
         for (int j = 0; j < s.length - 1; j++) {
             String Bigram = s[j].concat(" " + s[j + 1]);
-            double count = (double) cr.getNGramCount(Bigram);
-
+            double count = (double) cr.getSmoothedCount(Bigram);
             Prob *= count / cr.getFrequency(s[j]);
+//            if ((s[j].equals("hem") && s[j + 1].equals("locations") && s[j - 1].equals("the") && s[j - 2].equals("at") && s[j+2].equals("there") && s[j+3].equals("were")&& s[j+4].equals("traces")&& s[j+5].equals("of")&& s[j+6].equals("water")) || (s[j].equals("home") && s[j + 1].equals("locations") && s[j - 1].equals("the") && s[j - 2].equals("at")&& s[j+2].equals("there") && s[j+3].equals("were")&& s[j+4].equals("traces")&& s[j+5].equals("of")&& s[j+6].equals("water"))) {
+//                System.out.println("print prob for " + s[j] + " " + Prob + " einde");
+//            }
         }
+
         return Prob;
     }
 
     /**
-     * returns a map with candidate words and their noisy channel probability. 
-     * 
+     * returns a map with candidate words and their noisy channel probability.
+     *
      * @param word the word to get candidates for
      */
     public Map<String, Double> getCandidateWords(String word) {
