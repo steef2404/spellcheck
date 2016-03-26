@@ -32,7 +32,7 @@ public class SpellCorrector {
 
         for (int k = 0; k < words.length; k++) {
             Actualwords[k] = words[k];
-            System.out.println(Actualwords[k]);
+            //System.out.println(Actualwords[k]);
         }
 
         for (String word : words) {// Add all maps to the list of possible candidates.
@@ -46,20 +46,33 @@ public class SpellCorrector {
             for (String CandidateI : allWords.get(i).keySet()) {
                 //System.out.println(CandidateI + " " + words[i]);
                 words[i] = CandidateI; // Replace the word at spot i with this candidate
-                sentences.add(words); // Add the new sentence to the list, the set makes sure that doubles do not occur.
+                String[] temp1 = new String[words.length];
+                for (int k = 0; k < words.length; k++) {
+                    temp1[k] = words[k];
+                }
+                sentences.add(temp1); // Add the new sentence to the list, the set makes sure that doubles do not occur.
                 System.out.println(sentences.size());
                 //Given that only 2 errors occur and are never in consecutive words, skip an index
                 for (int j = i + 2; j < words.length; j++) {
                     for (String CandidateJ : allWords.get(j).keySet()) {
                         words[j] = CandidateJ; // Replace the word at spot j with this candidate
-                        sentences.add(words); // Add the new sentence the list, the set makes sure that doubles do not occur.
+                        String[] temp2 = new String[words.length];
+                        for (int k = 0; k < words.length; k++) {
+                            temp2[k] = words[k];
+                        }
+                        sentences.add(temp2); // Add the new sentence the list, the set makes sure that doubles do not occur.
                     }//Next CandidateJ
                     words[j] = Actualwords[j]; //Restoration of the jth word        
                 }//Next J
             }//Next CandidateI
             words[i] = Actualwords[i]; // Restoration of the ith word.
         }//Next i
-
+//        for (String[] s : sentences) {
+//            for (int k = 0; k < s.length; k++) {
+//                System.out.println(s[k]);
+//            }
+//            System.out.println("");
+//        }
         Double MaxProb = 0.0;
         //Calculate the probaility of each sentence, using the  bigram model
         for (String[] s : sentences) {
