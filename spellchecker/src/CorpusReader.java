@@ -1,3 +1,4 @@
+
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -42,7 +43,7 @@ public class CorpusReader {
     public double getFrequency(String word) {
         double f = 0;
 
-        f = ngrams.get(word) / totalWords;
+        f = getSmoothedCount(word) / totalWords;
 
         return f;
     }
@@ -118,40 +119,36 @@ public class CorpusReader {
         double smoothedCount = 0.0;
         String[] words = NGram.split(" ");// Split up in words, to get the first one.
         //System.out.println(words[0] + words[1]);
-        if (words.length == 1){ //Good-Turing smoothing for unigrams
-            if(getNGramCount(NGram) < 5){ // Only for words with less than 5 appearances
-                double tempInt = 0.0; // Counting the number of words appearin 1  time more than  Ngram
-                double tempInt1 = 0.0; // Counting the number of words appearing the same number of times as Ngram
-                if(getNGramCount(NGram) > 0){
-                    for(String word: vocabulary){
-                        if(getNGramCount(word) == getNGramCount(NGram)){
-                            tempInt1++;
-                        }
-                        else if(getNGramCount(word) == getNGramCount(NGram) + 1){
-                            tempInt++;
-                        }
-                    }
-                    smoothedCount += (getNGramCount(NGram) + 1) * tempInt/(tempInt1 * totalWords);
-                }
-                else{
-                    
-                    for(String word: vocabulary){
-                        if(getNGramCount(word) == 1){
-                            tempInt++;
-                        }
-                    }
-                    smoothedCount += tempInt / totalWords;
-                }
-                
-            }
-            else{
-                smoothedCount = getFrequency(NGram);
-            }
-            
-        }
-        else{ // bigram smoothing
-        smoothedCount += (getNGramCount(NGram) + 2 * getFrequency(words[0])) / (getNGramCount(words[0]) + 2);
-        }   
+//        if (words.length == 1) { //Good-Turing smoothing for unigrams
+//            if (getNGramCount(NGram) < 5) { // Only for words with less than 5 appearances
+//                double tempInt = 0.0; // Counting the number of words appearin 1  time more than  Ngram
+//                double tempInt1 = 0.0; // Counting the number of words appearing the same number of times as Ngram
+//                if (getNGramCount(NGram) > 0) {
+//                    for (String word : vocabulary) {
+//                        if (getNGramCount(word) == getNGramCount(NGram)) {
+//                            tempInt1++;
+//                        } else if (getNGramCount(word) == getNGramCount(NGram) + 1) {
+//                            tempInt++;
+//                        }
+//                    }
+//                    smoothedCount += (getNGramCount(NGram) + 1) * tempInt / (tempInt1 * totalWords);
+//                } else {
+//
+//                    for (String word : vocabulary) {
+//                        if (getNGramCount(word) == 1) {
+//                            tempInt++;
+//                        }
+//                    }
+//                    smoothedCount += tempInt / totalWords;
+//                }
+//
+//            } else {
+//                smoothedCount = ngrams.get(NGram) / totalWords;
+//            }
+//
+//        } else { // bigram smoothing
+            smoothedCount += (getNGramCount(NGram) + 2 * (ngrams.get(words[0]) / totalWords)) / (getNGramCount(words[0]) + 2);
+       // }
         return smoothedCount;
     }
 }

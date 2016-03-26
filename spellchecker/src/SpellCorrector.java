@@ -113,6 +113,9 @@ public class SpellCorrector {
             Prob *= maps.get(i).get(s[i]) / nine;
         }
         //Compute bigram probabilities
+//        if (Prob == 0) {
+//            Prob = 0.000025;
+//        }
         for (int j = 0; j < s.length - 1; j++) {
             String Bigram = s[j].concat(" " + s[j + 1]);
             double count = (double) cr.getSmoothedCount(Bigram);
@@ -171,7 +174,7 @@ public class SpellCorrector {
         double count = cmr.getConfusionCount(error, correct);
         double allCount = cmr.getCountCount(error);
         if (count == 0) {
-            p = 0;
+            p = 0.9;
         } else {
             p = count / allCount;
         }
