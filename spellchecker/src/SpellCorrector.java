@@ -77,12 +77,15 @@ public class SpellCorrector {
         for (String[] s : sentences) {
             Double Prob = SentenceP(s, allWords);
             if (Arrays.toString(s).equals("[at, the, home, locations, there, were, traces, of, water]")) {
-                System.out.println(Prob + " de zin");
+                // System.out.println(Prob + " de zin");
             }
             if (Prob >= MaxProb) {
+                finalSuggestion = "";
                 MaxProb = Prob;
-                finalSuggestion = Arrays.toString(s);
-                System.out.println(Prob + " " + finalSuggestion);
+                for (int i = 0; i < s.length; i++) {
+                    finalSuggestion = finalSuggestion.concat(s[i] + " ");
+                }
+                // System.out.println(Prob + " " + finalSuggestion);
             }
         }
         //Return the sentence with the highest probability
@@ -113,6 +116,7 @@ public class SpellCorrector {
         for (int j = 0; j < s.length - 1; j++) {
             String Bigram = s[j].concat(" " + s[j + 1]);
             double count = (double) cr.getSmoothedCount(Bigram);
+            //System.out.println(cr.getSmoothedCount("hme locations") + " hme locations count");
             Prob *= count / cr.getFrequency(s[j]);
 //            if ((s[j].equals("hem") && s[j + 1].equals("locations") && s[j - 1].equals("the") && s[j - 2].equals("at") && s[j+2].equals("there") && s[j+3].equals("were")&& s[j+4].equals("traces")&& s[j+5].equals("of")&& s[j+6].equals("water")) || (s[j].equals("home") && s[j + 1].equals("locations") && s[j - 1].equals("the") && s[j - 2].equals("at")&& s[j+2].equals("there") && s[j+3].equals("were")&& s[j+4].equals("traces")&& s[j+5].equals("of")&& s[j+6].equals("water"))) {
 //                System.out.println("print prob for " + s[j] + " " + Prob + " einde");

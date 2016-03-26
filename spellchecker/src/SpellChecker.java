@@ -27,7 +27,7 @@ public class SpellChecker {
 
     static void nonPeachTest(SpellCorrector sc) throws IOException {
         String[] sentences = {
-            "at the hme locations there were traces of water"
+            "the development of diabetes is present in moce that carry a transgen"
         };
 
         for (String s0 : sentences) {

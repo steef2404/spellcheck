@@ -118,7 +118,8 @@ public class CorpusReader {
 
         double smoothedCount = 0.0;
         String[] words = NGram.split(" ");// Split up in words, to get the first one.
-        smoothedCount += (getNGramCount(NGram) + 2 * getFrequency(words[1])) / (getNGramCount(words[1]) + 2);
+        //System.out.println(words[0] + words[1]);
+        smoothedCount += (getNGramCount(NGram) + 2 * getFrequency(words[0])) / (getNGramCount(words[1]) + 2);
 
         return smoothedCount;
     }
